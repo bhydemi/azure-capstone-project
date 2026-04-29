@@ -1,0 +1,45 @@
+{
+  "properties": {
+    "displayName": "Require tag with allowed values on resources",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Enforces that a specified tag exists on resources and has one of the allowed values. Can be assigned multiple times with different tag names and values.",
+    "metadata": {
+      "category": "Tags",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "tagName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Tag Name",
+          "description": "Name of the tag to enforce (e.g., 'Department', 'Environment')"
+        }
+      },
+      "allowedTagValues": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Allowed Tag Values",
+          "description": "List of allowed values for the tag (e.g., ['Finance', 'Engineering'] or ['Dev', 'Test', 'Prod'])"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "anyOf": [
+          {
+            "field": "[concat('tags[', parameters('tagName'), ']')]",
+            "exists": "false"
+          },
+          {
+            "field": "[concat('tags[', parameters('tagName'), ']')]",
+            "notIn": "[parameters('allowedTagValues')]"
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

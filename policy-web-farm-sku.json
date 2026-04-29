@@ -1,19 +1,35 @@
 {
-  "if": {
-    "allOf": [
-      {
-        "field": "type",
-        "equals": "Microsoft.Web/serverfarms"
+  "properties": {
+    "displayName": "Restrict App Service Plan (Server Farm) SKU Sizes",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "This policy restricts the SKU sizes that can be deployed for App Service Plans (Server Farms) to approved sizes: B1 and P0v3 only.",
+    "metadata": {
+      "category": "App Service",
+      "version": "1.0.0"
+    },
+    "parameters": {},
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Web/serverfarms"
+          },
+          {
+            "not": {
+              "field": "Microsoft.Web/serverfarms/sku.name",
+              "in": [
+                "B1",
+                "P0v3"
+              ]
+            }
+          }
+        ]
       },
-      {
-        "not": {
-          "field": "Microsoft.Web/serverfarms/sku.name",
-          "in": ["B1", "P0v3"]
-        }
+      "then": {
+        "effect": "deny"
       }
-    ]
-  },
-  "then": {
-    "effect": "deny"
+    }
   }
 }

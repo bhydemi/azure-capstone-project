@@ -1,9 +1,0 @@
-{
-  "if": {
-    "field": "tags.Environment",
-    "exists": false
-  },
-  "then": {
-    "effect": "deny"
-  }
-}

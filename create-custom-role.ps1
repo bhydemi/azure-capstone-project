@@ -24,22 +24,34 @@ $role.Description = $roleDescription
 $role.IsCustom = $true
 $role.Id = $null
 
-# Define permissions for Key Vault secrets and certificates
-$permissions = @(
-    "Microsoft.KeyVault/vaults/secrets/get/action",
-    "Microsoft.KeyVault/vaults/secrets/set/action",
-    "Microsoft.KeyVault/vaults/secrets/delete/action",
-    "Microsoft.KeyVault/vaults/secrets/read/action",
-    "Microsoft.KeyVault/vaults/secrets/readMetadata/action",
-    "Microsoft.KeyVault/vaults/certificates/get/action",
-    "Microsoft.KeyVault/vaults/certificates/set/action",
-    "Microsoft.KeyVault/vaults/certificates/delete/action",
-    "Microsoft.KeyVault/vaults/certificates/read/action",
-    "Microsoft.KeyVault/vaults/certificates/readMetadata/action"
+# Define management plane permissions (read access to vault)
+$managementActions = @(
+    "Microsoft.KeyVault/vaults/read"
 )
 
-$role.Actions = $permissions
+# Define data plane permissions for Key Vault secrets and certificates
+$dataActions = @(
+    # Secret data plane permissions
+    "Microsoft.KeyVault/vaults/secrets/getSecret/action",
+    "Microsoft.KeyVault/vaults/secrets/setSecret/action",
+    "Microsoft.KeyVault/vaults/secrets/delete",
+    "Microsoft.KeyVault/vaults/secrets/backup/action",
+    "Microsoft.KeyVault/vaults/secrets/restore/action",
+    "Microsoft.KeyVault/vaults/secrets/readMetadata/action",
+    # Certificate data plane permissions
+    "Microsoft.KeyVault/vaults/certificates/read",
+    "Microsoft.KeyVault/vaults/certificates/write",
+    "Microsoft.KeyVault/vaults/certificates/delete",
+    "Microsoft.KeyVault/vaults/certificates/backup/action",
+    "Microsoft.KeyVault/vaults/certificates/restore/action",
+    "Microsoft.KeyVault/vaults/certificates/managecontacts/action",
+    "Microsoft.KeyVault/vaults/certificates/manageissuers/action"
+)
+
+$role.Actions = $managementActions
 $role.NotActions = @()
+$role.DataActions = $dataActions
+$role.NotDataActions = @()
 $role.AssignableScopes = @("/subscriptions/$subscriptionId")
 
 try {
