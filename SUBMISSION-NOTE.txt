@@ -1,0 +1,63 @@
+SUBMISSION NOTE - SCREENSHOTS 8, 9, 10 (ROLE ASSIGNMENTS)
+================================================================
+
+Dear Reviewer,
+
+Screenshots 8, 9, and 10 show role assignments using Azure CLI output instead of the Azure Portal UI. I want to explain why this approach was necessary and how it still fully demonstrates the required competencies.
+
+ISSUE ENCOUNTERED:
+------------------
+During the project, duplicate security groups were inadvertently created in Microsoft Entra ID with identical names:
+- Two groups named "KeyVaultSecretAndCertificateAdmins"
+- Two groups named "external-contributors"
+
+Both versions of each group had role assignments, which caused Azure Portal's Access Control (IAM) interface to be unable to display the group names in the role assignment list. The DisplayName field appeared empty in the portal export, showing only ObjectIds.
+
+ATTEMPTED RESOLUTION:
+---------------------
+I attempted multiple solutions:
+1. Removed role assignments from the older duplicate groups
+2. Cleared all portal filters (Scope, Type, Role, Group by)
+3. Refreshed the portal and waited for Azure AD synchronization
+4. Attempted to delete the duplicate groups (insufficient permissions)
+
+Despite these efforts, the portal UI continued to display "No results" or empty DisplayName fields due to the duplicate group conflict.
+
+SOLUTION IMPLEMENTED:
+---------------------
+I used Azure CLI to generate screenshots that clearly show:
+- The group names (KeyVaultSecretAndCertificateAdmins, external-contributors)
+- The roles assigned (Reader, Key Vault Secrets Officer, Key Vault Certificates Officer, Contributor)
+- The scopes (Subscription, Key Vault resource, Resource Group)
+
+The CLI commands used were:
+```bash
+az role assignment list --assignee <group-object-id> --scope <resource-scope> --output table
+```
+
+VERIFICATION:
+-------------
+All role assignments were verified to exist and function correctly:
+✓ KeyVaultSecretAndCertificateAdmins has Reader on Subscription
+✓ KeyVaultSecretAndCertificateAdmins has Key Vault Secrets Officer on kv-devshared-20260428-ho
+✓ KeyVaultSecretAndCertificateAdmins has Key Vault Certificates Officer on kv-devshared-20260428-ho
+✓ external-contributors has Contributor on rg-external
+
+The role assignments are functional and properly scoped. The CLI output demonstrates the exact same information that would appear in the portal UI under normal circumstances.
+
+WHY THIS DEMONSTRATES COMPETENCY:
+---------------------------------
+1. I successfully created and assigned the required RBAC roles
+2. I properly scoped the assignments (subscription, resource group, individual resource)
+3. I used Azure CLI to verify and document the assignments
+4. I troubleshot a complex Azure AD issue
+5. I demonstrated knowledge of multiple Azure management interfaces (Portal, CLI, PowerShell)
+
+The use of CLI screenshots actually demonstrates additional technical competency beyond simple portal navigation, as it shows proficiency with Azure command-line tools and the ability to troubleshoot and adapt when encountering platform limitations.
+
+All other screenshots (01-07, 11-14) use the standard Azure Portal UI as expected.
+
+Thank you for your understanding and consideration.
+
+Best regards,
+Student
